@@ -8,7 +8,11 @@ defmodule GestaoFinanceiraWeb.TransactionController do
 
   def index(conn, _params) do
     user_id = conn.assigns.current_user_id
-    transactions = Finance.list_transactions_by_user(user_id)
+    transactions =
+      user_id
+      |> Finance.list_transactions_by_user()
+      |> GestaoFinanceira.Repo.preload(:tags)
+
     render(conn, :index, transactions: transactions)
   end
 
@@ -25,18 +29,22 @@ defmodule GestaoFinanceiraWeb.TransactionController do
   end
 
   def show(conn, %{"id" => id}) do
-    transaction = Finance.get_transaction!(id)
+    transaction =
+      id
+      |> Finance.get_transaction!()
+      |> GestaoFinanceira.Repo.preload(:tags)
+
     render(conn, :show, transaction: transaction)
   end
 
-  def update(conn, %{"id" => id, "transaction" => transaction_params}) do
-    transaction = Finance.get_transaction!(id)
-    tag_ids = Map.get(transaction_params, "tag_ids", [])
+  def update(conn, %{"id" => id} = params) do
+    transaction = Finance.get_transaction!(id) |> GestaoFinanceira.Repo.preload(:tags)
+    tag_ids = Map.get(params, "tag_ids", [])
     tags = Finance.get_tags_by_ids(tag_ids)
-    params = Map.delete(transaction_params, "tag_ids")
+    params = Map.delete(params, "tag_ids")
 
     with {:ok, %Transaction{} = transaction} <-
-           Finance.update_transaction_with_tags(transaction, params, tags) do
+          Finance.update_transaction_with_tags(transaction, params, tags) do
       render(conn, :show, transaction: transaction)
     end
   end

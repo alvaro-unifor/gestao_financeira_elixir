@@ -1,6 +1,6 @@
 defmodule GestaoFinanceiraWeb.TagJSON do
   def index(%{tags: tags}) do
-    %{data: Enum.map(tags, &tag_json/1)}
+    Enum.map(tags, &tag_json/1)
   end
 
   def show(%{tag: tag}) do

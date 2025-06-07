@@ -9,7 +9,7 @@ defmodule GestaoFinanceira.Finance.Transaction do
     field(:date, :utc_datetime)
     belongs_to(:user, GestaoFinanceira.Accounts.User)
 
-    many_to_many(:tags, GestaoFinanceira.Finance.Tag, join_through: "transactions_tags")
+    many_to_many :tags, GestaoFinanceira.Finance.Tag, join_through: "transactions_tags", on_replace: :delete
 
     timestamps(type: :utc_datetime)
   end
