@@ -97,4 +97,8 @@ defmodule GestaoFinanceira.Finance do
       )
     )
   end
+
+  def get_transaction(id) do
+    Repo.get(Transaction, id)
+  end
 end

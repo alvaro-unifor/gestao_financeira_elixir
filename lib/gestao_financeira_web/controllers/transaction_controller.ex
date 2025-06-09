@@ -50,10 +50,13 @@ defmodule GestaoFinanceiraWeb.TransactionController do
   end
 
   def delete(conn, %{"id" => id}) do
-    transaction = Finance.get_transaction!(id)
-
-    with {:ok, %Transaction{}} <- Finance.delete_transaction(transaction) do
-      send_resp(conn, :no_content, "")
+    case Finance.get_transaction(id) do
+      nil ->
+        send_resp(conn, :not_found, "")
+      transaction ->
+        with {:ok, %Transaction{}} <- Finance.delete_transaction(transaction) do
+          send_resp(conn, :no_content, "")
+        end
     end
   end
 end
