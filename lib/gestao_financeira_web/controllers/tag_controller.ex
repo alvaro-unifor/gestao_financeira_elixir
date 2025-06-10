@@ -25,8 +25,9 @@ defmodule GestaoFinanceiraWeb.TagController do
     render(conn, "show.json", tag: tag)
   end
 
-  def update(conn, %{"id" => id, "tag" => tag_params}) do
+  def update(conn, %{"id" => id} = params) do
     tag = Finance.get_tag!(id)
+    tag_params = Map.drop(params, ["id"])
 
     with {:ok, %Tag{} = tag} <- Finance.update_tag(tag, tag_params) do
       render(conn, "show.json", tag: tag)
