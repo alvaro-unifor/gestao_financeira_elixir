@@ -14,6 +14,17 @@ services:
     volumes:
       - .:/app
 
+  frontend:
+    build:
+      context: ../gestao_financeira_frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../gestao_financeira_frontend:/app
+    depends_on:
+      - app
+
   db:
     image: postgres:13
     environment:
