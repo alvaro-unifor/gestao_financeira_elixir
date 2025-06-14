@@ -13,7 +13,8 @@ defmodule GestaoFinanceiraWeb.UserJSON do
       name: user.name,
       email: user.email,
       inserted_at: user.inserted_at,
-      updated_at: user.updated_at
+      updated_at: user.updated_at,
+      password_hash: user.password_hash
     }
   end
 end

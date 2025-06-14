@@ -41,32 +41,4 @@ defmodule GestaoFinanceiraWeb.TagController do
       send_resp(conn, :no_content, "")
     end
   end
-
-  def transactions_by_tag(conn, _params) do
-    user_id = conn.assigns.current_user_id
-    tags = Finance.list_tags_with_transactions_by_user(user_id)
-
-    result =
-      Enum.map(tags, fn tag ->
-        %{
-          id: tag.id,
-          name: tag.name,
-          transactions:
-            Enum.map(tag.transactions, fn t ->
-              %{
-                id: t.id,
-                description: t.description,
-                amount: t.amount,
-                type: t.type,
-                date: t.date,
-                user_id: t.user_id,
-                inserted_at: t.inserted_at,
-                updated_at: t.updated_at
-              }
-            end)
-        }
-      end)
-
-    json(conn, result)
-  end
 end
